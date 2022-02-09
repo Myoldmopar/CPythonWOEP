@@ -23,7 +23,7 @@ if (NOT EXISTS ${BUILD_FOLDER}/cpython-3.10.2/LICENSE)
         message(STATUS "Building CPython")
         execute_process(
                 WORKING_DIRECTORY ${BUILD_FOLDER}/cpython-3.10.2
-                COMMAND ./PCbuild/build.bat -p ${CPYTHON_PLATFORM}
+                COMMAND ${BUILD_FOLDER}/cpython-3.10.2/PCbuild/build.bat -p ${CPYTHON_PLATFORM}
         )
     else ()
         message(STATUS "Configuring CPython")
