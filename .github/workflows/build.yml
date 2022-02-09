@@ -1,0 +1,42 @@
+name: Linux Build
+
+on: [push, pull_request]
+
+jobs:
+  alternate_build_configurations:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          set -x
+          echo "Using Apt to install dependencies"
+          sudo apt-get update
+          sudo apt-get install libffi-dev
+
+      - name: Create Build Directory
+        run: cmake -E make_directory ./build/
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ./build/
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release \
+                -DLINK_WITH_PYTHON=ON \
+                ../
+
+      - name: Build MyProgram
+        working-directory: ./build/
+        shell: bash
+        run: cmake --build . --target MyProgram -j 2
+
+      - name: Test MyProgram
+        working-directory: ./build/
+        shell: bash
+        run: ./MyProgram
