@@ -14,11 +14,8 @@ jobs:
 
       - name: Install System Dependencies
         shell: bash
-        run: |
-          set -x
-          echo "Using Apt to install dependencies"
-          sudo apt-get update
-          sudo apt-get install libffi-dev
+        if: runner.os == 'Linux'
+        run: sudo apt-get install libffi-dev
 
       - name: Create Build Directory
         run: cmake -E make_directory ./build/
@@ -26,10 +23,7 @@ jobs:
       - name: Configure CMake
         shell: bash
         working-directory: ./build/
-        run: |
-          cmake -DCMAKE_BUILD_TYPE=Release \
-                -DLINK_WITH_PYTHON=ON \
-                ../
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DLINK_WITH_PYTHON=ON ../
 
       - name: Build MyProgram
         working-directory: ./build/
